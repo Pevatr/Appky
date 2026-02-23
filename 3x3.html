@@ -179,6 +179,7 @@ body{
   position:relative;
   background:var(--board-bg);border-radius:12px;padding:10px;
   border:1px solid var(--border);
+  touch-action:none;
 }
 
 .progress-bar{height:4px;border-radius:2px;background:var(--bg3);overflow:hidden;margin-top:6px;}
@@ -193,6 +194,7 @@ body{
   background:var(--cell-hidden);border:1px solid rgba(255,255,255,.06);
   transition:background .12s,transform .1s,box-shadow .15s;
   position:relative;cursor:default;overflow:visible;
+  touch-action:none;
 }
 .cell.revealed{background:var(--cell-rev);color:var(--text)}
 .cell.hidden-cell{background:var(--cell-hidden);color:transparent}
@@ -947,14 +949,20 @@ window.addEventListener('keydown',e=>{
 });
 
 let sX=null,sY=null;
-board.addEventListener('pointerdown',e=>{sX=e.clientX;sY=e.clientY;});
+board.addEventListener('pointerdown',e=>{
+  e.preventDefault();
+  sX=e.clientX;sY=e.clientY;
+  try{board.setPointerCapture(e.pointerId);}catch(ex){}
+});
 board.addEventListener('pointerup',e=>{
+  e.preventDefault();
   if(sX==null)return;
   const dx=e.clientX-sX,dy=e.clientY-sY;sX=sY=null;
-  const T=24;if(Math.abs(dx)<T&&Math.abs(dy)<T)return;
+  const T=18;if(Math.abs(dx)<T&&Math.abs(dy)<T)return;
   if(gameOver||strictBlocked)return;
   if(Math.abs(dx)>Math.abs(dy))tryMove(0,dx>0?1:-1);else tryMove(dy>0?1:-1,0);
 });
+board.addEventListener('pointermove',e=>{if(sX!=null)e.preventDefault();});
 
 board.addEventListener('click',e=>{
   if(!selectStartMode)return;
