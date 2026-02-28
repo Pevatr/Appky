@@ -85,11 +85,13 @@ html, body {
 .tile-shop  { background: linear-gradient(145deg, #1a1500, #120e00); border-color: rgba(251,191,36,.18); box-shadow: 0 4px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(251,191,36,.06); }
 .tile-notes { background: linear-gradient(145deg, #0d1528, #090f1e); border-color: rgba(99,102,241,.2);  box-shadow: 0 4px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(99,102,241,.07); }
 .tile-game  { background: linear-gradient(145deg, #1a0a00, #120600); border-color: rgba(249,115,22,.18); box-shadow: 0 4px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(249,115,22,.06); }
+.tile-food  { background: linear-gradient(145deg, #0c1f10, #071508); border-color: rgba(34,197,94,.22);  box-shadow: 0 4px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(34,197,94,.08); }
 
 .tile-quit::before  { background: rgba(34,197,94,.06); }
 .tile-shop::before  { background: rgba(251,191,36,.05); }
 .tile-notes::before { background: rgba(99,102,241,.05); }
 .tile-game::before  { background: rgba(249,115,22,.05); }
+.tile-food::before  { background: rgba(34,197,94,.06); }
 
 .tile-glow {
   position: absolute; top: -20px; right: -20px;
@@ -99,6 +101,7 @@ html, body {
 .tile-shop  .tile-glow { background: radial-gradient(circle, rgba(251,191,36,.12), transparent 70%); }
 .tile-notes .tile-glow { background: radial-gradient(circle, rgba(99,102,241,.12), transparent 70%); }
 .tile-game  .tile-glow { background: radial-gradient(circle, rgba(249,115,22,.12), transparent 70%); }
+.tile-food  .tile-glow { background: radial-gradient(circle, rgba(34,197,94,.15),  transparent 70%); }
 
 .tile-emoji { font-size: 2rem; line-height: 1; position: relative; z-index: 1; filter: drop-shadow(0 2px 8px rgba(0,0,0,.4)); }
 .tile-body  { position: relative; z-index: 1; }
@@ -114,6 +117,7 @@ html, body {
 .badge-shop  { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.2); }
 .badge-notes { background: rgba(99,102,241,.15); color: #818cf8; border: 1px solid rgba(99,102,241,.25); }
 .badge-game  { background: rgba(249,115,22,.12); color: #fb923c; border: 1px solid rgba(249,115,22,.2); }
+.badge-food  { background: rgba(34,197,94,.15);  color: #4ade80;  border: 1px solid rgba(34,197,94,.25); }
 
 .app-tile { animation: tileIn .35s ease both; }
 .app-tile:nth-child(1) { animation-delay: .05s; }
@@ -179,14 +183,14 @@ html, body {
       <div class="tile-badge badge-notes">zápisky</div>
     </a>
 
-    <a class="app-tile tile-game" href="https://pevatr.github.io/Appky/3x3.html">
+    <a class="app-tile tile-food" href="https://pevatr.github.io/Appky/Foodlog-light.html">
       <div class="tile-glow"></div>
-      <div class="tile-emoji">🧭</div>
+      <div class="tile-emoji">🥗</div>
       <div class="tile-body">
-        <div class="tile-name">Cesta čísel</div>
-        <div class="tile-desc">Logická hra, odkryj celou mřížku</div>
+        <div class="tile-name">Jídlo</div>
+        <div class="tile-desc">Záznam jídla, kalorie, přehled</div>
       </div>
-      <div class="tile-badge badge-game">hra</div>
+      <div class="tile-badge badge-food">jídlo</div>
     </a>
 
   </div>
