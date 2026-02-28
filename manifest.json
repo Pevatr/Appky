@@ -1,7 +1,7 @@
 {
   "name": "Moje Appky",
   "short_name": "Appky",
-  "description": "Osobní appky – jídlo, kouření, nákupy, poznámky",
+  "description": "Osobni appky - jidlo, koureni, nakupy, poznamky",
   "start_url": "/Appky/launcher.html",
   "scope": "/Appky/",
   "display": "standalone",
