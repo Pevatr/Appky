@@ -1,22 +1,22 @@
 {
   "name": "Moje Appky",
   "short_name": "Appky",
-  "description": "Osobní appky – kouření, nákupy, poznámky, hry",
+  "description": "Osobní appky – jídlo, kouření, nákupy, poznámky",
   "start_url": "/Appky/launcher.html",
   "scope": "/Appky/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#1a1a2e",
+  "background_color": "#0a0f1e",
+  "theme_color": "#0a0f1e",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "ikona-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "ikona-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
