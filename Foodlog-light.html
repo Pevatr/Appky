@@ -114,10 +114,38 @@ body {
 
 /* ── TODAY LIST ── */
 .today-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
-.tl-section-label {
-  font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;
-  letter-spacing: 1px; padding-left: 2px;
+
+/* ── SBALITELNÉ SEKCE ── */
+.tl-section {
+  display: flex; flex-direction: column; gap: 8px;
 }
+.tl-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 14px; background: var(--card2); border: 1px solid var(--border);
+  border-radius: 12px; cursor: pointer; user-select: none;
+  transition: border-color .15s, background .15s;
+}
+.tl-section-header:active { border-color: var(--accent); }
+.tl-section-left { display: flex; align-items: center; gap: 8px; }
+.tl-section-label {
+  font-size: 12px; font-weight: 700; color: var(--muted2); text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tl-section-count {
+  font-size: 11px; color: var(--muted); font-family: var(--mono);
+  background: var(--card); border-radius: 6px; padding: 2px 7px;
+}
+.tl-section-arrow {
+  font-size: 12px; color: var(--muted); transition: transform .25s ease;
+}
+.tl-section.collapsed .tl-section-arrow { transform: rotate(-90deg); }
+.tl-section-body {
+  display: flex; flex-direction: column; gap: 8px;
+  overflow: hidden;
+  transition: max-height .3s ease, opacity .25s ease;
+  max-height: 2000px; opacity: 1;
+}
+.tl-section.collapsed .tl-section-body { max-height: 0; opacity: 0; pointer-events: none; }
 .tl-item {
   background: var(--card); border: 1px solid var(--border);
   border-radius: 12px; padding: 13px 14px;
@@ -314,6 +342,21 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 /* ── OBLÍBENÁ JÍDLA ── */
 .fav-section { margin-bottom: 18px; }
+.fav-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; cursor: pointer; user-select: none; padding: 2px 0;
+}
+.fav-section-header .grid-label { margin-bottom: 0; cursor: pointer; }
+.fav-section-arrow {
+  font-size: 12px; color: var(--muted); transition: transform .25s ease;
+}
+.fav-section.collapsed .fav-section-arrow { transform: rotate(-90deg); }
+.fav-section-body {
+  overflow: hidden;
+  transition: max-height .3s ease, opacity .25s ease;
+  max-height: 300px; opacity: 1;
+}
+.fav-section.collapsed .fav-section-body { max-height: 0; opacity: 0; pointer-events: none; }
 .fav-scroll {
   display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
   scrollbar-width: none;
@@ -542,9 +585,14 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
   <div class="screen-body">
 
     <!-- ── OBLÍBENÁ JÍDLA ── -->
-    <div class="fav-section" id="fav-section">
-      <div class="grid-label">⭐ Oblíbená jídla</div>
-      <div class="fav-scroll" id="fav-scroll"></div>
+    <div class="fav-section collapsed" id="fav-section">
+      <div class="fav-section-header" onclick="toggleFavSection()">
+        <div class="grid-label">⭐ Oblíbená jídla</div>
+        <span class="fav-section-arrow">▼</span>
+      </div>
+      <div class="fav-section-body">
+        <div class="fav-scroll" id="fav-scroll"></div>
+      </div>
     </div>
 
     <!-- Název vždy viditelný -->
@@ -695,16 +743,16 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     <div class="setting-group">
       <div class="setting-label">Vyber ikonu</div>
       <div class="icon-picker-grid" id="sf-icon-grid">
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍌')">🍌</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥐')">🥐</button>
         <button class="icon-pick-btn" onclick="pickIcon(this,'🍳')">🍳</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥓')">🥓</button>
         <button class="icon-pick-btn" onclick="pickIcon(this,'🥩')">🥩</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🍗')">🍗</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🧀')">🧀</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥣')">🥣</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍽️')">🍽️</button>
         <button class="icon-pick-btn" onclick="pickIcon(this,'🥗')">🥗</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🍝')">🍝</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🥞')">🥞</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🍞')">🍞</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🥚')">🥚</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🍲')">🍲</button>
-        <button class="icon-pick-btn" onclick="pickIcon(this,'🥙')">🥙</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍫')">🍫</button>
       </div>
     </div>
     <div class="modal-btns">
@@ -734,16 +782,16 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     <div class="setting-group">
       <div class="setting-label">Ikona</div>
       <div class="icon-picker-grid" id="ef-icon-grid">
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍌')">🍌</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥐')">🥐</button>
         <button class="icon-pick-btn" onclick="pickIconEf(this,'🍳')">🍳</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥓')">🥓</button>
         <button class="icon-pick-btn" onclick="pickIconEf(this,'🥩')">🥩</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍗')">🍗</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🧀')">🧀</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥣')">🥣</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍽️')">🍽️</button>
         <button class="icon-pick-btn" onclick="pickIconEf(this,'🥗')">🥗</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍝')">🍝</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥞')">🥞</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍞')">🍞</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥚')">🥚</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍲')">🍲</button>
-        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥙')">🥙</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍫')">🍫</button>
       </div>
     </div>
     <div class="modal-btns">
@@ -877,6 +925,18 @@ function goTo(scr){
 // ══════════════════════════════════════
 // DNES
 // ══════════════════════════════════════
+// stav sbalení sekcí — false = sbaleno (výchozí)
+const tlState = { drinks: false, foods: false };
+
+function toggleSection(key){
+  tlState[key] = !tlState[key];
+  renderDnes();
+}
+
+function toggleFavSection(){
+  el('fav-section').classList.toggle('collapsed');
+}
+
 function renderDnes(){
   const water=dayWater(todayKey()), kcal=dayKcal(todayKey());
   const wG=cfg.waterGoal, kG=cfg.kcalGoal;
@@ -929,14 +989,34 @@ function renderDnes(){
   let html='';
 
   if(drinks.length){
-    html+=`<div class="tl-section-label">💧 Pití</div>`;
-    drinks.forEach(e=>{
-      html+=tlItem(e);
-    });
+    const collapsed = tlState.drinks ? '' : 'collapsed';
+    html+=`<div class="tl-section ${collapsed}" id="tl-drinks">
+      <div class="tl-section-header" onclick="toggleSection('drinks')">
+        <div class="tl-section-left">
+          <span class="tl-section-label">💧 Pití</span>
+          <span class="tl-section-count">${drinks.length}×</span>
+        </div>
+        <span class="tl-section-arrow">▼</span>
+      </div>
+      <div class="tl-section-body">
+        ${drinks.map(e=>tlItem(e)).join('')}
+      </div>
+    </div>`;
   }
   if(foods.length){
-    html+=`<div class="tl-section-label" style="margin-top:12px">🍽️ Jídlo</div>`;
-    foods.forEach(e=>{ html+=tlItem(e); });
+    const collapsed = tlState.foods ? '' : 'collapsed';
+    html+=`<div class="tl-section ${collapsed}" id="tl-foods">
+      <div class="tl-section-header" onclick="toggleSection('foods')">
+        <div class="tl-section-left">
+          <span class="tl-section-label">🍽️ Jídlo</span>
+          <span class="tl-section-count">${foods.length}×</span>
+        </div>
+        <span class="tl-section-arrow">▼</span>
+      </div>
+      <div class="tl-section-body">
+        ${foods.map(e=>tlItem(e)).join('')}
+      </div>
+    </div>`;
   }
   c.innerHTML=html;
 }
