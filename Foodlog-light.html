@@ -312,6 +312,80 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .btn-no  { padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: var(--muted2); font-family: var(--sans); font-size: 14px; font-weight: 700; cursor: pointer; }
 .btn-yes { padding: 14px; border-radius: 12px; border: none; background: var(--danger); color: #fff; font-family: var(--sans); font-size: 14px; font-weight: 800; cursor: pointer; }
 
+/* ── OBLÍBENÁ JÍDLA ── */
+.fav-section { margin-bottom: 18px; }
+.fav-scroll {
+  display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.fav-scroll::-webkit-scrollbar { display: none; }
+.fav-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 11px 13px; flex-shrink: 0;
+  min-width: 110px; max-width: 130px; cursor: pointer;
+  transition: border-color .15s, background .15s;
+  position: relative;
+}
+.fav-card:active { border-color: var(--green); background: var(--green-dim); }
+.fav-card-icon  { font-size: 22px; margin-bottom: 5px; }
+.fav-card-name  { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fav-card-detail{ font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+.fav-card-actions { display: flex; gap: 4px; margin-top: 7px; }
+.fav-act-btn {
+  flex: 1; font-size: 11px; padding: 4px 2px; text-align: center;
+  background: var(--card2); border-radius: 7px; cursor: pointer;
+  border: none; color: var(--muted2); font-family: var(--sans); font-weight: 700;
+  transition: background .15s;
+}
+.fav-act-btn:active { background: var(--border); }
+.fav-empty { font-size: 12px; color: var(--muted); padding: 10px 2px; font-style: italic; }
+
+/* save-fav btn */
+.btn-save-fav {
+  width: 100%; padding: 12px; border-radius: 12px;
+  background: var(--card); border: 1px dashed var(--border);
+  color: var(--muted2); font-family: var(--sans); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; margin-bottom: 12px;
+}
+.btn-save-fav:not(:disabled):active { border-color: var(--warn); color: var(--warn); background: #2a2200; }
+.btn-save-fav:disabled { opacity: .3; cursor: default; }
+
+/* ── ICON PICKER ── */
+.icon-picker-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px;
+}
+.icon-pick-btn {
+  font-size: 24px; padding: 10px; border-radius: 10px;
+  background: var(--card2); border: 2px solid transparent;
+  cursor: pointer; text-align: center; transition: all .15s;
+}
+.icon-pick-btn.picked { border-color: var(--green); background: var(--green-dim); }
+.icon-pick-btn:active { transform: scale(.9); }
+
+/* ── KCAL KALKULAČKA ── */
+.kcal-calc {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px;
+}
+.kcal-calc-title { font-size: 11px; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+.kcal-calc-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 10px; }
+.kcal-calc-sep { font-size: 11px; color: var(--muted); text-align: center; font-family: var(--mono); }
+.kcal-calc-result {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--card2); border-radius: 10px; padding: 10px 14px;
+  min-height: 42px;
+}
+.kcal-calc-val { font-size: 18px; font-weight: 800; font-family: var(--mono); color: var(--orange); }
+.kcal-calc-val span { font-size: 11px; color: var(--muted); font-weight: 400; margin-left: 3px; }
+.kcal-calc-use {
+  font-size: 12px; font-weight: 700; padding: 7px 12px;
+  background: var(--orange-dim); border: 1px solid var(--orange); color: var(--orange);
+  border-radius: 8px; cursor: pointer; font-family: var(--sans);
+  transition: all .15s;
+}
+.kcal-calc-use:disabled { opacity: .3; cursor: default; }
+.kcal-calc-use:not(:disabled):active { background: var(--orange); color: #0f172a; }
+
 /* ── TOAST ── */
 .toast-wrap { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 400; pointer-events: none; display: flex; flex-direction: column; gap: 8px; align-items: center; }
 .toast {
@@ -467,6 +541,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
   </div>
   <div class="screen-body">
 
+    <!-- ── OBLÍBENÁ JÍDLA ── -->
+    <div class="fav-section" id="fav-section">
+      <div class="grid-label">⭐ Oblíbená jídla</div>
+      <div class="fav-scroll" id="fav-scroll"></div>
+    </div>
+
     <!-- Název vždy viditelný -->
     <div class="name-row">
       <div class="grid-label">Název jídla</div>
@@ -544,6 +624,28 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
       <div class="prev-kcal fc" id="fp-kcal">– <span>kcal</span></div>
     </div>
 
+    <!-- ── KCAL KALKULAČKA ── -->
+    <div class="kcal-calc">
+      <div class="kcal-calc-title">🧮 Kalkulačka kalorií</div>
+      <div class="kcal-calc-row">
+        <div class="input-group">
+          <div class="input-label">100 g =</div>
+          <input class="inp" type="number" id="calc-per100" placeholder="230" oninput="updCalc()">
+        </div>
+        <div class="kcal-calc-sep">→</div>
+        <div class="input-group">
+          <div class="input-label">Váha (g)</div>
+          <input class="inp" type="number" id="calc-weight" placeholder="125" oninput="updCalc()">
+        </div>
+      </div>
+      <div class="kcal-calc-result">
+        <div class="kcal-calc-val" id="calc-result">– <span>kcal</span></div>
+        <button class="kcal-calc-use" id="calc-use-btn" onclick="useCalcResult()" disabled>Použít ↑</button>
+      </div>
+    </div>
+
+    <button class="btn-save-fav" id="btn-save-fav" onclick="openSaveFav()" disabled>⭐ Uložit jako oblíbené</button>
+
     <button class="add-btn food-btn-color" id="food-add-btn" onclick="addFood()" disabled>Přidat</button>
     <a class="kal-link" href="https://www.kaloricketabulky.cz/" target="_blank" rel="noopener">
       🔍 Vyhledat kalorie na kaloricketabulky.cz ↗
@@ -580,6 +682,76 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
   </button>
 </nav>
 </div><!-- .app -->
+
+<!-- ── SAVE FAV MODAL ── -->
+<div class="modal-overlay" id="savefav-modal" onclick="if(event.target===this)closeSaveFav()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⭐ Uložit oblíbené jídlo</div>
+    <div class="setting-group">
+      <div class="setting-label">Název</div>
+      <input class="inp" type="text" id="sf-name" placeholder="Kuřecí salát…">
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">Vyber ikonu</div>
+      <div class="icon-picker-grid" id="sf-icon-grid">
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍳')">🍳</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥩')">🥩</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍗')">🍗</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥗')">🥗</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍝')">🍝</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥞')">🥞</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍞')">🍞</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥚')">🥚</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🍲')">🍲</button>
+        <button class="icon-pick-btn" onclick="pickIcon(this,'🥙')">🥙</button>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeSaveFav()">Zrušit</button>
+      <button class="btn-save" onclick="confirmSaveFav()">Uložit ⭐</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── EDIT FAV MODAL ── -->
+<div class="modal-overlay" id="editfav-modal" onclick="if(event.target===this)closeEditFav()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">✏️ Upravit oblíbené</div>
+    <div class="setting-group">
+      <div class="setting-label">Název</div>
+      <input class="inp" type="text" id="ef-name" placeholder="Název…">
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">Váha (g)</div>
+      <input class="inp" type="number" id="ef-wgt" placeholder="100">
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">Kalorie (kcal)</div>
+      <input class="inp" type="number" id="ef-kcal" placeholder="350">
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">Ikona</div>
+      <div class="icon-picker-grid" id="ef-icon-grid">
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍳')">🍳</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥩')">🥩</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍗')">🍗</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥗')">🥗</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍝')">🍝</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥞')">🥞</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍞')">🍞</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥚')">🥚</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🍲')">🍲</button>
+        <button class="icon-pick-btn" onclick="pickIconEf(this,'🥙')">🥙</button>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeEditFav()">Zrušit</button>
+      <button class="btn-save-green" onclick="confirmEditFav()">Uložit</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── EDIT MODAL ── -->
 <div class="modal-overlay" id="edit-modal" onclick="if(event.target===this)closeEdit()">
@@ -657,16 +829,17 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 const SKEY = 'fll_v2';
 let cfg  = { name:'', waterGoal:2000, kcalGoal:2500 };
 let data = {}; // { "YYYY-MM-DD": [{id,time,icon,name,vol,wgt,kcal,type}] }
+let favs = []; // [{id, icon, name, wgt, kcal}]
 
 function todayKey(){ return new Date().toISOString().split('T')[0]; }
 
 function load(){
   try {
     const r = localStorage.getItem(SKEY);
-    if(r){ const p=JSON.parse(r); cfg={...cfg,...p.cfg}; data=p.data||{}; }
+    if(r){ const p=JSON.parse(r); cfg={...cfg,...p.cfg}; data=p.data||{}; favs=p.favs||[]; }
   } catch(e){}
 }
-function persist(){ localStorage.setItem(SKEY, JSON.stringify({cfg, data})); }
+function persist(){ localStorage.setItem(SKEY, JSON.stringify({cfg, data, favs})); }
 
 function dayList(key){ return data[key]||[]; }
 function todayList(){ return dayList(todayKey()); }
@@ -698,7 +871,7 @@ function goTo(scr){
   if(scr==='dnes') renderDnes();
   if(scr==='hist') renderHist();
   if(scr==='piti') resetDrink();
-  if(scr==='jidlo') resetFood();
+  if(scr==='jidlo') { resetFood(); renderFavs(); }
 }
 
 // ══════════════════════════════════════
@@ -814,7 +987,13 @@ function askDelDay(key, label){
   el('confirm-overlay').classList.add('show');
 }
 function confirmYes_override(){
-  if(pendingDayKey){
+  if(pendingFavId){
+    favs=favs.filter(f=>f.id!==pendingFavId); pendingFavId=null;
+    persist();
+    el('confirm-overlay').classList.remove('show');
+    renderFavs();
+    toast('Oblíbené smazáno 🗑️');
+  } else if(pendingDayKey){
     delete data[pendingDayKey]; pendingDayKey=null;
     persist();
     el('confirm-overlay').classList.remove('show');
@@ -965,6 +1144,11 @@ function resetFood(){
   el('f-inp-k100').value='';
   el('food-preview').classList.add('hidden');
   el('food-add-btn').disabled=true;
+  el('btn-save-fav').disabled=true;
+  el('calc-per100').value='';
+  el('calc-weight').value='';
+  el('calc-result').innerHTML='– <span>kcal</span>';
+  el('calc-use-btn').disabled=true;
 }
 
 function selWgt(btn,val){
@@ -1002,13 +1186,15 @@ function updFoodPreview(){
   const name=el('f-inp-name').value.trim();
   const wgt=resolveFWgt(), typ=resolveFTyp();
   const box=el('food-preview'), btn=el('food-add-btn');
-  if(!name||!wgt||!typ){ box.classList.add('hidden'); btn.disabled=true; return; }
+  const favBtn=el('btn-save-fav');
+  if(!name||!wgt||!typ){ box.classList.add('hidden'); btn.disabled=true; favBtn.disabled=true; return; }
   const kcal = typ.kcal;
   box.classList.remove('hidden');
   el('fp-main').textContent=`${typ.icon} ${name} – ${wgt} g`;
   el('fp-detail').textContent=`${kcal} kcal celkem`;
   el('fp-kcal').innerHTML=`${kcal} <span>kcal</span>`;
   btn.disabled=false;
+  favBtn.disabled=false;
 }
 
 function addFood(){
@@ -1021,7 +1207,153 @@ function addFood(){
 }
 
 // ══════════════════════════════════════
-// HISTORIE
+// OBLÍBENÁ JÍDLA
+// ══════════════════════════════════════
+function renderFavs(){
+  const c=el('fav-scroll');
+  if(!favs.length){
+    c.innerHTML=`<div class="fav-empty">Zatím žádná oblíbená. Ulož jídlo hvězdičkou ↓</div>`;
+    return;
+  }
+  c.innerHTML=favs.map(f=>`
+    <div class="fav-card">
+      <div class="fav-card-icon" onclick="addFav('${f.id}')">${f.icon}</div>
+      <div class="fav-card-name" onclick="addFav('${f.id}')">${esc(f.name)}</div>
+      <div class="fav-card-detail">${f.wgt}g · ${f.kcal} kcal</div>
+      <div class="fav-card-actions">
+        <button class="fav-act-btn" onclick="openEditFav('${f.id}')">✏️</button>
+        <button class="fav-act-btn" onclick="askDelFav('${f.id}','${esc(f.name)}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addFav(id){
+  const f=favs.find(x=>x.id===id);
+  if(!f) return;
+  addEntry({ id:uid(), time:now(), icon:f.icon, name:f.name, wgt:f.wgt, kcal:f.kcal, type:'food' });
+  toast(`${f.icon} ${f.name} přidáno`);
+  goTo('dnes');
+}
+
+// ── ULOŽENÍ OBLÍBENÉHO ──
+let sfIcon = '🍽️';
+
+function openSaveFav(){
+  const name=el('f-inp-name').value.trim();
+  el('sf-name').value=name;
+  sfIcon='🍽️';
+  el('sf-icon-grid').querySelectorAll('.icon-pick-btn').forEach(b=>b.classList.remove('picked'));
+  el('savefav-modal').classList.add('show');
+}
+function closeSaveFav(){ el('savefav-modal').classList.remove('show'); }
+
+function pickIcon(btn, icon){
+  el('sf-icon-grid').querySelectorAll('.icon-pick-btn').forEach(b=>b.classList.remove('picked'));
+  btn.classList.add('picked');
+  sfIcon=icon;
+}
+
+function confirmSaveFav(){
+  const name=el('sf-name').value.trim();
+  if(!name){ toast('Zadej název ❗'); return; }
+  const wgt=resolveFWgt(), typ=resolveFTyp();
+  if(!wgt||!typ){ closeSaveFav(); return; }
+  favs.push({ id:uid(), icon:sfIcon, name, wgt, kcal:typ.kcal });
+  persist();
+  closeSaveFav();
+  renderFavs();
+  toast(`${sfIcon} ${name} uloženo do oblíbených ⭐`);
+}
+
+// ── EDITACE OBLÍBENÉHO ──
+let editFavId=null, efIcon='🍽️';
+
+function openEditFav(id){
+  const f=favs.find(x=>x.id===id);
+  if(!f) return;
+  editFavId=id; efIcon=f.icon;
+  el('ef-name').value=f.name;
+  el('ef-wgt').value=f.wgt;
+  el('ef-kcal').value=f.kcal;
+  el('ef-icon-grid').querySelectorAll('.icon-pick-btn').forEach(b=>{
+    b.classList.toggle('picked', b.textContent===f.icon);
+  });
+  el('editfav-modal').classList.add('show');
+}
+function closeEditFav(){ editFavId=null; el('editfav-modal').classList.remove('show'); }
+
+function pickIconEf(btn, icon){
+  el('ef-icon-grid').querySelectorAll('.icon-pick-btn').forEach(b=>b.classList.remove('picked'));
+  btn.classList.add('picked');
+  efIcon=icon;
+}
+
+function confirmEditFav(){
+  const idx=favs.findIndex(x=>x.id===editFavId);
+  if(idx<0){ closeEditFav(); return; }
+  favs[idx].name = el('ef-name').value.trim() || favs[idx].name;
+  favs[idx].wgt  = parseInt(el('ef-wgt').value)||favs[idx].wgt;
+  favs[idx].kcal = parseInt(el('ef-kcal').value)||favs[idx].kcal;
+  favs[idx].icon = efIcon;
+  persist();
+  closeEditFav();
+  renderFavs();
+  toast('Oblíbené upraveno ✓');
+}
+
+// ── MAZÁNÍ OBLÍBENÉHO ──
+let pendingFavId=null;
+
+function askDelFav(id, name){
+  pendingFavId=id;
+  el('confirm-sub').textContent=`Oblíbené: „${name}"`;
+  el('confirm-overlay').classList.add('show');
+}
+
+// ══════════════════════════════════════
+// KCAL KALKULAČKA
+// ══════════════════════════════════════
+function updCalc(){
+  const per100=parseFloat(el('calc-per100').value);
+  const wgt=parseFloat(el('calc-weight').value);
+  const resEl=el('calc-result');
+  const useBtn=el('calc-use-btn');
+  if(per100>0 && wgt>0){
+    const kcal=Math.round((per100/100)*wgt);
+    resEl.innerHTML=`${kcal} <span>kcal</span>`;
+    useBtn.disabled=false;
+  } else {
+    resEl.innerHTML=`– <span>kcal</span>`;
+    useBtn.disabled=true;
+  }
+}
+
+function useCalcResult(){
+  const per100=parseFloat(el('calc-per100').value);
+  const wgt=parseFloat(el('calc-weight').value);
+  if(!per100||!wgt) return;
+  const kcal=Math.round((per100/100)*wgt);
+  // vyplň váhu do custom inputu
+  el('f-inp-wgt').value=wgt;
+  el('f-inp-k100').value=kcal;
+  // aktivuj custom váhu a custom kcal
+  const wgtBtns=el('wgt-grid').querySelectorAll('.grid-btn');
+  wgtBtns.forEach(b=>b.classList.remove('sel-wgt'));
+  const customWgtBtn=Array.from(wgtBtns).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'custom'"));
+  if(customWgtBtn){ customWgtBtn.classList.add('sel-wgt'); fWgt='custom'; }
+  el('f-wgt-wrap').style.display='block';
+  const ftypBtns=el('ftyp-grid').querySelectorAll('.grid-btn');
+  ftypBtns.forEach(b=>b.classList.remove('sel-ftyp'));
+  const customFtypBtn=Array.from(ftypBtns).find(b=>b.dataset.k==='custom');
+  if(customFtypBtn){ customFtypBtn.classList.add('sel-ftyp'); fTyp={kcal,icon:'🍽️',custom:true}; }
+  el('f-ftyp-wrap').style.display='block';
+  syncPanel('food-custom','f-wgt-wrap','f-ftyp-wrap');
+  updFoodPreview();
+  toast(`Vypočteno: ${kcal} kcal pro ${wgt} g ✓`);
+}
+
+// ══════════════════════════════════════
 // ══════════════════════════════════════
 function renderHist(){
   const today=todayKey();
